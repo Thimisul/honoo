@@ -3,7 +3,7 @@ class UsersController < ApplicationController
 
 
   # POST /users
-  def create
+  def addUser
     @user = User.new(user_params)
 
     if @user.save
@@ -14,7 +14,7 @@ class UsersController < ApplicationController
   end
 
    # PATCH/PUT /users/1
-   def updateUser
+   def update
     if @user.update(user_params)
       render json: @user, except: [:created_at, :updated_at]
     else
@@ -23,7 +23,7 @@ class UsersController < ApplicationController
   end
 
    # GET /users/1
-   def getUserById
+   def show
     render json: @user, except: [:created_at, :updated_at]
   end
 
@@ -34,7 +34,7 @@ class UsersController < ApplicationController
  
   # Login /user/login
   def login
-    
+
   end
 
   private

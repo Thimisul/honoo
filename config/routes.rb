@@ -5,8 +5,8 @@ Rails.application.routes.draw do
   get 'tipoEvento', to: 'event_types#getEventType'
 
   post 'user', to: 'users#addUser'
-  put 'user', to: 'users#updateUser'
-  get 'user', to: 'users#getUserById'
+  put 'user', to: 'users#update'
+  get 'user/:id', to: 'users#show'
   delete 'user/:id', to: 'users#destroy'
   post 'user/login', to: 'users#login'
  
