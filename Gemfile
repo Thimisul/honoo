@@ -22,6 +22,8 @@ gem 'tty-spinner'
 gem 'faker'
 # Reduzir a forma de filtro por url
 gem 'rack-reducer', require: 'rack/reducer'
+# Liberar acesso a rest de outro site. Ex: swagger
+gem 'rack-cors'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
