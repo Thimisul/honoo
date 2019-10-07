@@ -18,7 +18,10 @@ gem 'puma', '~> 3.11'
 
 # Mostrar loading enquanto faz algum processo no console
 gem 'tty-spinner'
+# Popular banco de dados com dados fake
 gem 'faker'
+# Reduzir a forma de filtro por url
+gem 'rack-reducer', require: 'rack/reducer'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
