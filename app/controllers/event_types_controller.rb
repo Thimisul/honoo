@@ -1,9 +1,11 @@
 class EventTypesController < ApplicationController
-  def get_event_type
-    
-   
 
-    render json: {"message" => "yes, it worked"}
+  # GET /event_types
+  def getEventType
+    @event_types = EventType.all
 
+    render json: @event_types, only: [:id, :name]
   end
+
+  
 end
