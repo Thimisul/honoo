@@ -13,10 +13,9 @@ Rails.application.routes.draw do
   post 'event', to: 'events#addEvent'
   put 'event', to: 'events#updateEvent'
   get 'event', to: 'events#getEvent'
+  get 'event/search', to: 'events#searchEvent'
   get 'event/:id', to: 'events#getEventById'
   delete 'event/:id', to: 'events#destroy'
-  get 'event/search', to: 'events#searchEvent'
  
-
 
 end

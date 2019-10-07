@@ -37,7 +37,7 @@ class EventsController < ApplicationController
     @event.destroy
   end
 
-  def search_event
+  def searchEvent
     @events = Event::Reducer.apply(params)
     render json: @events
   end
@@ -50,6 +50,6 @@ class EventsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def event_params
-      params.require(:event).permit(:title, :start_date, :end_date, :street, :neighborhood, :city, :reference_point, :description, :event_type_id, :user_id, :status)
+      params.require(:event).permit(:title, :starDate, :endDate, :street, :neighborhood, :city, :reference_point, :description, :event_type_id, :user_id, :status)
     end
 end
