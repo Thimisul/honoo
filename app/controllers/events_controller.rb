@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  before_action :set_event, only: [:show, :update, :destroy]
+  before_action :set_event, only: [:updateEvent, :getEventById, :destroy]
 
   # POST /event
   def addEvent
@@ -38,8 +38,12 @@ class EventsController < ApplicationController
   end
 
   def searchEvent
-    @events = Event::Reducer.apply(params)
-    render json: @events
+    if params[:rdate] && params[:start_date] || params[:end_date]
+      render json: {"message" => "rdate não pode ser passado como parameto junto de start_date ou end_date"}
+    else
+      @events = Event::Reducer.apply(params)
+      render json: @events
+    end
   end
 
   private
@@ -50,6 +54,6 @@ class EventsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def event_params
-      params.require(:event).permit(:title, :starDate, :endDate, :street, :neighborhood, :city, :reference_point, :description, :event_type_id, :user_id, :status)
+      params.require(:event).permit(:title, :startDate, :endDate, :street, :neighborhood, :city, :reference_point, :description, :event_type_id, :user_id, :status)
     end
 end

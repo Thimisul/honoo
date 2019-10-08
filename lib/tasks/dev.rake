@@ -22,6 +22,66 @@ namespace :dev do
         EventType.find_or_create_by!(eventType)
       end
     end
+
+    show_spinner("Cadastrando usuarios...") do
+      
+      100.times do |i|
+        user = Faker::Internet.username
+        User.find_or_create_by!(
+          username: user,
+          email: Faker::Internet.email(name: user),
+          password: Faker::Internet.password(min_length: 10, max_length: 20, mix_case: true, special_characters: true),
+          birthdate: Faker::Date.birthday(min_age: 18, max_age: 65),
+          sex: ("M" or "F")
+          )
+      end
+    end
+
+
+    show_spinner("Cadastrando Eventos...") do
+      100.times do |i|
+        startDate = Faker::Time.between(from: 1.year.ago, to: 1.year.from_now)
+        Event.find_or_create_by!(
+          title: Faker::Lorem.sentence,
+          startDate: startDate,
+          endDate: startDate + 2.hours,
+          street: Faker::Address.street_address,
+          neighborhood: Faker::Address.city_suffix,
+          city: Faker::Address.city,
+          reference_point: Faker::Address.city_prefix,
+          description: Faker::Lorem.paragraph(sentence_count: 2),
+          event_type_id: rand(1..4),
+          user_id: rand(1..100),
+          status: true
+        )
+      end
+    end
+
+    show_spinner("Cadastrando Participantes...") do
+      
+      200.times do |i|
+        event_id = rand(1..100)
+        eventdate = Event.find(event_id).startDate
+
+        Participant.find_or_create_by!(
+          event_id: event_id,
+          user_id: rand(1..100),
+          registrationdate: Faker::Time.between(from: eventdate - rand(1..24).hours, to: eventdate)
+          )
+      end
+    end
+
+    show_spinner("Cadastrando Messages...") do
+      600.times do |i|
+        @participant_id = rand(1..200)
+        Message.find_or_create_by!(
+          participant_id: @participant_id,
+          date: ((Participant.find(@participant_id).registrationdate) + (1.hour) or + (2.hour)),
+          message: Faker::Lorem.paragraphs
+          )
+      end
+    end
+
   end
 
 

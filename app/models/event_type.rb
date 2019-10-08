@@ -1,3 +1,3 @@
 class EventType < ApplicationRecord
-    has_many :events, class_name: "event", foreign_key: "reference_id"
+    has_many :events
 end
