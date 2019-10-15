@@ -5,12 +5,12 @@ class ParticipantsController < ApplicationController
   def index
     @participants = Participant.all
 
-    render json: @participants
+    render json: @participants, except: [:created_at, :updated_at]
   end
 
   # GET /participants/1
   def show
-    render json: @participant
+    render json: @participant, except: [:created_at, :updated_at]
   end
 
   # POST /participants
@@ -27,7 +27,7 @@ class ParticipantsController < ApplicationController
   # PATCH/PUT /participants/1
   def update
     if @participant.update(participant_params)
-      render json: @participant
+      render json: @participant, except: [:created_at, :updated_at]
     else
       render json: @participant.errors, status: :unprocessable_entity
     end

@@ -5,12 +5,12 @@ class MessagesController < ApplicationController
   def index
     @messages = Message.all
 
-    render json: @messages
+    render json: @messages, except: [:created_at, :updated_at]
   end
 
   # GET /messages/1
   def show
-    render json: @message
+    render json: @message, except: [:created_at, :updated_at]
   end
 
   # POST /messages
@@ -27,7 +27,7 @@ class MessagesController < ApplicationController
   # PATCH/PUT /messages/1
   def update
     if @message.update(message_params)
-      render json: @message
+      render json: @message, except: [:created_at, :updated_at]
     else
       render json: @message.errors, status: :unprocessable_entity
     end

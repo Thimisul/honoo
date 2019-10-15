@@ -27,19 +27,24 @@ namespace :dev do
       
       100.times do |i|
         user = Faker::Internet.username
+        if (rand(0..1) == 1)
+          @aux = "M"
+        else
+          @aux = "F"
+        end
         User.find_or_create_by!(
           username: user,
           email: Faker::Internet.email(name: user),
           password: Faker::Internet.password(min_length: 10, max_length: 20, mix_case: true, special_characters: true),
           birthdate: Faker::Date.birthday(min_age: 18, max_age: 65),
-          sex: ("M" or "F")
-          )
+          sex: @aux
+        )
       end
     end
 
 
     show_spinner("Cadastrando Eventos...") do
-      100.times do |i|
+      200.times do |i|
         startDate = Faker::Time.between(from: 1.year.ago, to: 1.year.from_now)
         Event.find_or_create_by!(
           title: Faker::Lorem.sentence,

@@ -16,6 +16,7 @@ gem 'puma', '~> 3.11'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+gem 'pry-rails', :group => :development
 # Mostrar loading enquanto faz algum processo no console
 gem 'tty-spinner'
 # Popular banco de dados com dados fake

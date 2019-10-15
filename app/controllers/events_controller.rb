@@ -24,12 +24,12 @@ class EventsController < ApplicationController
   def getEvent
     @events = Event.all
 
-    render json: @events
+    render json: @events, except: [:created_at, :updated_at]
   end
 
   # GET /event/1
   def getEventById
-    render json: @event
+    render json: @event, except: [:created_at, :updated_at]
   end
 
   # DELETE /event/1
@@ -38,11 +38,11 @@ class EventsController < ApplicationController
   end
 
   def searchEvent
-    if params[:rdate] && params[:start_date] || params[:end_date]
+    if params[:rdate] && ( params[:start_date] || params[:end_date])
       render json: {"message" => "rdate não pode ser passado como parameto junto de start_date ou end_date"}
     else
       @events = Event::Reducer.apply(params)
-      render json: @events
+      render json: @events, except: [:created_at, :updated_at]
     end
   end
 
