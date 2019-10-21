@@ -82,7 +82,7 @@ namespace :dev do
         Message.find_or_create_by!(
           participant_id: @participant_id,
           date: ((Participant.find(@participant_id).registrationdate) + (1.hour) or + (2.hour)),
-          message: Faker::Lorem.paragraphs
+          message: Faker::Lorem.paragraphs(sentence_count: 2)
           )
       end
     end
