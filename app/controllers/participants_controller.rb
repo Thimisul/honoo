@@ -13,6 +13,21 @@ class ParticipantsController < ApplicationController
     render json: @participant, except: [:created_at, :updated_at]
   end
 
+  # GET /participants/user/1
+  def getParticipantUserID
+    @participant = Participant.where(user_id: 11)
+    render json: @participant.map{|part| Event.where(id: part.event_id)} , except: [:created_at, :updated_at]
+  end
+
+  @participant.map{|part| Event.where(id: part.event_id)}
+
+  
+  # GET /participants/event/1
+  def getParticipantEventID
+    @participant = Participant.where(event_id: params[:id])
+    render json: @participant, except: [:created_at, :updated_at]
+  end
+
   # POST /participants
   def create
     @participant = Participant.new(participant_params)

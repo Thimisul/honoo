@@ -19,5 +19,7 @@ Rails.application.routes.draw do
   get 'event/:id', to: 'events#getEventById'
   delete 'event/:id', to: 'events#destroy'
  
+  get 'participant/user/:id', to: 'participants#getParticipantUserID'
+  get 'participant/event/:id', to: 'participants#getParticipantEventID'
 
 end
