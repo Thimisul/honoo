@@ -24,12 +24,21 @@ class UsersController < ApplicationController
 
    # GET /users/1
    def show
-    render json: @user, except: [:created_at, :updated_at]
+    if(@user.status == true)
+      render json: @user, except: [:created_at, :updated_at]
+    else 
+      if(@user.status == false)
+        render status: 404
+      else
+        render json: @user.errors
+      end
+    end
   end
 
   # DELETE /users/1
   def destroy
-    @user.destroy
+    @user.update(status: false) 
+    render status: 404
   end
  
   # Login /user/login
