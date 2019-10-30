@@ -15,11 +15,12 @@ class ParticipantsController < ApplicationController
 
   # GET /participants/user/1
   def getParticipantUserID
-    @participant = Participant.where(user_id: 11)
-    render json: @participant.map{|part| Event.where(id: part.event_id)} , except: [:created_at, :updated_at]
+    @participant = Participant.where(user_id: params[:id]);
+    @participant.map{|part| Event.where(id: part.event_id)}
+    render json: @participant.first , except: [:created_at, :updated_at]
   end
 
-  @participant.map{|part| Event.where(id: part.event_id)}
+  #@participant.map{|part| Event.where(id: part.event_id)}
 
   
   # GET /participants/event/1

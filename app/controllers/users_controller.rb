@@ -43,7 +43,7 @@ class UsersController < ApplicationController
  
   # Login /user/login
   def login
-    if (@status = User.where(email: params[:login], password: params[:senha]) != [])
+    if (@status = User.where(email: params[:login], password: params[:senha], status: true) != [])
       render json: @status
     else
       render json: @status, status: :unprocessable_entity
