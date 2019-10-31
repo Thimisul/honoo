@@ -7,7 +7,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      render json: @user, except: [:created_at, :updated_at], status: :created, location: @user 
+      render json: @user, except: [:created_at, :updated_at, :status], status: :created, location: @user 
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -16,7 +16,7 @@ class UsersController < ApplicationController
    # PATCH/PUT /users/1
    def update
     if @user.update(user_params)
-      render json: @user, except: [:created_at, :updated_at]
+      render json: @user, except: [:created_at, :updated_at, :status]
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -25,7 +25,7 @@ class UsersController < ApplicationController
    # GET /users/1
    def show
     if(@user.status == true)
-      render json: @user, except: [:created_at, :updated_at]
+      render json: @user, except: [:created_at, :updated_at, :status]
     else 
       if(@user.status == false)
         render status: 404
@@ -38,7 +38,7 @@ class UsersController < ApplicationController
   # DELETE /users/1
   def destroy
     @user.update(status: false) 
-    render status: 404
+    render @user.status, status: 400
   end
  
   # Login /user/login
