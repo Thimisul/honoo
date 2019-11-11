@@ -25,6 +25,8 @@ gem 'faker'
 gem 'rack-reducer', require: 'rack/reducer'
 # Liberar acesso a rest de outro site. Ex: swagger
 gem 'rack-cors'
+# Gerar Token
+gem 'jwt'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 

@@ -6,35 +6,41 @@ class EventsController < ApplicationController
     @event = Event.new(event_params)
 
     if @event.save
-      render json: @event, status: :created, location: @event
+      render json: @event, status: :ok, location: @event
     else
-      render json: @event.errors, status: :unprocessable_entity
+      render json: @event.errors, status: :bad_request
     end
   end
 
     # PATCH/PUT /event/1
     def updateEvent
       if @event.update(event_params)
-        render json: @event
+        render json: @event, status: :ok
       else
-        render json: @event.errors, status: :unprocessable_entity
+        render json: @event.errors, status: :bad_request
       end
     end
   # GET /event
   def getEvent
-    @events = Event.all
-
-    render json: @events, except: [:created_at, :updated_at]
+    if @events = Event.all
+      render json: @events, except: [:created_at, :updated_at], status: :ok
+    else
+      render json: @events.errors, status: :bad_request
+    end
   end
 
   # GET /event/1
   def getEventById
-    render json: @event, except: [:created_at, :updated_at]
+    render json: @event, except: [:created_at, :updated_at], status: :ok
   end
 
   # DELETE /event/1
   def destroy
-    @event.destroy
+    if @event.update(status: false) 
+      render @event.status, status: :ok
+    else
+      render json: @event.errors, status: :bad_request
+    end
   end
 
   def searchEvent
@@ -49,7 +55,10 @@ class EventsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_event
-      @event = Event.find(params[:id])
+      if @event = Event.find(params[:id])
+      else
+        render json: @event.errors, status: :bad_request
+      end
     end
 
     # Only allow a trusted parameter "white list" through.
