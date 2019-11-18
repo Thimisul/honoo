@@ -22,12 +22,12 @@ Rails.application.routes.draw do
   
     post 'participant', to: 'participants#create'
     get 'participant/:id', to: 'participants#show'
-    delete 'paticipant/:id', to: 'participants#destroy'
+    delete 'participant/:id', to: 'participants#destroy'
    
-    post 'mensagem', to: 'events#create'
-    put 'mensagem', to: 'events#update'
-    get 'mensagem/:id', to: 'events#show'
-    delete 'event/:id', to: 'events#destroy'
+    post 'mensagem', to: 'messages#create'
+    put 'mensagem', to: 'messages#update'
+    get 'mensagem/:id', to: 'messages#show'
+    delete 'event/:id', to: 'messages#destroy'
     
   
   end

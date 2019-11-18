@@ -34,18 +34,18 @@ class ParticipantsController < ApplicationController
     @participant = Participant.new(participant_params)
 
     if @participant.save
-      render json: @participant, status: :created, location: @participant
+      render json: {message: "Salvo!"}, status: :ok, location: @participant
     else
-      render json: @participant.errors, status: :unprocessable_entity
+      render json: @participant.errors, status: :bad_request
     end
   end
 
   # PATCH/PUT /participants/1
   def update
     if @participant.update(participant_params)
-      render json: @participant, except: [:created_at, :updated_at]
+      render json: @participant, except: [:created_at, :updated_at], status: :ok
     else
-      render json: @participant.errors, status: :unprocessable_entity
+      render json: @participant.errors, status: :bad_request
     end
   end
 
@@ -62,6 +62,6 @@ class ParticipantsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def participant_params
-      params.require(:participant).permit(:event_id, :user_id, :registrationdate, :message)
+      params.require(:participant).permit(:eventoId, :userId, :registrationDate, :message)
     end
 end

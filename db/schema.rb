@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_28_225527) do
+ActiveRecord::Schema.define(version: 2019_11_14_125129) do
 
   create_table "event_types", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -25,34 +25,34 @@ ActiveRecord::Schema.define(version: 2019_10_28_225527) do
     t.string "street"
     t.string "neighborhood"
     t.string "city"
-    t.string "reference_point"
+    t.string "referencePoint"
     t.string "description"
-    t.bigint "event_type_id"
-    t.bigint "user_id"
     t.boolean "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["event_type_id"], name: "index_events_on_event_type_id"
-    t.index ["user_id"], name: "index_events_on_user_id"
+    t.bigint "ownerId"
+    t.bigint "eventTypeId"
+    t.index ["eventTypeId"], name: "fk_rails_c382144af1"
+    t.index ["ownerId"], name: "fk_rails_a58f2a17cf"
   end
 
   create_table "messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.bigint "participant_id"
     t.datetime "date"
     t.string "message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["participant_id"], name: "index_messages_on_participant_id"
+    t.bigint "participantId"
+    t.index ["participantId"], name: "fk_rails_941f50a762"
   end
 
   create_table "participants", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.bigint "event_id"
-    t.bigint "user_id"
-    t.datetime "registrationdate"
+    t.datetime "registrationDate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["event_id"], name: "index_participants_on_event_id"
-    t.index ["user_id"], name: "index_participants_on_user_id"
+    t.bigint "userId"
+    t.bigint "eventoId"
+    t.index ["eventoId"], name: "fk_rails_767a7af066"
+    t.index ["userId"], name: "fk_rails_bddc25f6d4"
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -66,9 +66,9 @@ ActiveRecord::Schema.define(version: 2019_10_28_225527) do
     t.boolean "status", default: true
   end
 
-  add_foreign_key "events", "event_types"
-  add_foreign_key "events", "users"
-  add_foreign_key "messages", "participants"
-  add_foreign_key "participants", "events"
-  add_foreign_key "participants", "users"
+  add_foreign_key "events", "event_types", column: "eventTypeId"
+  add_foreign_key "events", "users", column: "ownerId"
+  add_foreign_key "messages", "participants", column: "participantId"
+  add_foreign_key "participants", "events", column: "eventoId"
+  add_foreign_key "participants", "users", column: "userId"
 end

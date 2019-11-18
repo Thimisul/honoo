@@ -25,7 +25,7 @@ class UsersController < ApplicationController
    # GET /users/1
    def show
     if(@user.status == true)
-      render json: @user, except: [:created_at, :updated_at, :status], status: :ok
+      render json: @user, except: [:created_at, :updated_at, :status, :password], status: :ok
     else 
       if(@user.status == false)
         render status: :bad_request
@@ -37,8 +37,13 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    @user.update(status: false) 
-    render @user.status, status: :ok
+    if (@user.status == false)
+      render json: { message: "Usuario jah havia sido deletado!"}, status: :ok
+    elsif @user.update(status: false) 
+      render json: { message: "Usuario deletado!"}, status: :ok
+    else
+      render json: @user.status, status: :bad_request
+    end
   end
  
   # Login /user/login
@@ -52,7 +57,7 @@ class UsersController < ApplicationController
       if(@status = User.where(email: params[:email], password: params[:password], status: false) != [])
       render json: {msg: "Conta Desativada!"}, status: :bad_request # default status: :unprocessable_entity
       else
-        render json: @status, status: :bad_request
+        render json: {msg: "Login ou senha Incorretos!"}, status: :bad_request
     end
   end
     
