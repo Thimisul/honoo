@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_14_125129) do
+ActiveRecord::Schema.define(version: 2019_11_24_230221) do
 
   create_table "event_types", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -45,6 +45,15 @@ ActiveRecord::Schema.define(version: 2019_11_14_125129) do
     t.index ["participantId"], name: "fk_rails_941f50a762"
   end
 
+  create_table "msgs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "message"
+    t.datetime "date"
+    t.bigint "participantId"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["participantId"], name: "fk_rails_0a6a1c2d7c"
+  end
+
   create_table "participants", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.datetime "registrationDate"
     t.datetime "created_at", null: false
@@ -69,6 +78,7 @@ ActiveRecord::Schema.define(version: 2019_11_14_125129) do
   add_foreign_key "events", "event_types", column: "eventTypeId"
   add_foreign_key "events", "users", column: "ownerId"
   add_foreign_key "messages", "participants", column: "participantId"
+  add_foreign_key "msgs", "participants", column: "participantId"
   add_foreign_key "participants", "events", column: "eventoId"
   add_foreign_key "participants", "users", column: "userId"
 end
