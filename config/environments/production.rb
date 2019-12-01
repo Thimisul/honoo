@@ -24,11 +24,12 @@ Rails.application.configure do
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
+  
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
-
+ 
   # Store uploaded files on the local file system (see config/storage.yml for options)
   config.active_storage.service = :local
 
@@ -73,6 +74,9 @@ Rails.application.configure do
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
+
+  config.assets.js_compressor = Uglifier.new(harmony: true, compress: { unused: false })
+  
 
   if ENV["RAILS_LOG_TO_STDOUT"].present?
     logger           = ActiveSupport::Logger.new(STDOUT)
