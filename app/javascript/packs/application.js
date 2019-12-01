@@ -17,8 +17,7 @@
 
 console.log('Hello World from Webpacker')
 
-  //= require jquery
-        //= require jquery_ujs
-        //= require turbolinks
-        //= require ckeditor/init
-        //= require_tree .
+    //= require jquery
+    //= require rails-ujs
+    //= require activestorage
+    //= require_tree .
