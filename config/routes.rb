@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
  
-  resources :msgs
   #  resources :messages
   
     # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
@@ -25,12 +24,10 @@ Rails.application.routes.draw do
     get 'participant/:id', to: 'participants#show'
     delete 'participant/:id', to: 'participants#destroy'
    
-    post 'mensagem', to: 'msgs#create'
-    put 'mensagem', to: 'msgs#update'
-    get 'mensagem/:id', to: 'msgs#show'
-    delete 'event/:id', to: 'msgs#destroy'
-
-    get 'mensagem/evento/:id', to: 'events#getMensagens'
+    post 'mensagem', to: 'messages#create'
+    put 'mensagem', to: 'messages#update'
+    get 'mensagem/:id', to: 'messages#show'
+    delete 'event/:id', to: 'messages#destroy'
     
   
   end

@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  before_action :set_event, only: [:updateEvent, :getEventById, :destroy, :getMensagens]
+  before_action :set_event, only: [:updateEvent, :getEventById, :destroy]
 
   # POST /event
   def addEvent
@@ -14,33 +14,17 @@ class EventsController < ApplicationController
     # PATCH/PUT /event/1
     def updateEvent
       if @event.update(event_params)
-        render json: @event, status: :ok
+         @aux = jsonid()
+        render json: @aux, status: :ok
       else
-        render json: @event.errors, status: :bad_request
+        render json: @aux.errors, status: :bad_request
       end
     end
   # GET /event
     def getEvent
-      @json = []
-      if @events = Event.all
-      @events.each do |event|
-        @json.push({ participant: event.participants,            
-                    endDate: event.endDate, 
-                    city: event.city,
-                    street: event.street,
-                    description: event.description,
-                    id: event.id,
-                    neighborhood: event.neighborhood,
-                    eventType: event.eventType,
-                    title: event.title,
-                    user: event.owner,
-                    startDate: event.startDate,
-                    referencePoint: event.referencePoint,
-                    status: event.status
-                    }
-        )
-      end
-        render json: @json, except: [:created_at, :updated_at, :password], status: :ok
+      @events = Event.all
+      if @aux = jsonall()
+        render json: @aux, except: [:created_at, :updated_at], status: :ok
       else
         render json: @events.errors, status: :bad_request
       end
@@ -48,7 +32,8 @@ class EventsController < ApplicationController
 
   # GET /event/1
   def getEventById
-    render json: @event, except: [:created_at, :updated_at], status: :ok
+    @aux = jsonid()
+    render json: @aux, except: [:created_at, :updated_at], status: :ok
   end
 
   # DELETE /event/1
@@ -61,85 +46,157 @@ class EventsController < ApplicationController
   end
 
   def searchEvent
-      @json = []
-      if @events =  Event::Reducer.apply(params)
-      @events.each do |event|
-        @json.push({ participant: event.users, 
-                    endDate: event.endDate, 
-                    city: event.city,
-                    street: event.street,
-                    description: event.description,
-                    id: event.id,
-                    neighborhood: event.neighborhood,
-                    eventType: event.eventType,
-                    title: event.title,
-                    user: event.owner,
-                    startDate: event.startDate,
-                    referencePoint: event.referencePoint,
-                    status: event.status
-                    }
-        )
-      end
+    if params[:rdate] && ( params[:start_date] || params[:end_date])
+      render json: {"message" => "rdate não pode ser passado como parameto junto de start_date ou end_date"}
+    else
+      @events = Event::Reducer.apply(params)
+      @aux = jsonall()
+      render json: @aux, except: [:created_at, :updated_at]
     end
-      render json: @json, except: [:created_at, :updated_at]
   end
-
-   # Get /mensagem/event/1
-   def getMensagens
-    @json = []
-    eventId = params[:id]
-            @msgs = Msg.find_by_sql(["
-              SELECT 
-              msgs.id,
-              msgs.date as messageData,
-              msgs.message as message,
-              pes.id as userId,
-              pes.username as username
-            FROM events e
-            JOIN participants pe
-            ON e.id = pe.eventoId
-            JOIN users pes
-            ON pe.userId = pes.id
-            JOIN msgs 
-            ON msgs.participantId = pe.id
-            WHERE e.id  = ?",
-            eventId])
-           
-            @msgs.each do |msg| 
-            @json.push({
-              id: msg.id,
-              messageData: msg.messageData,
-              message: msg.message,
-              userId: msg.userId,
-              username: msg.username
-            })
-          end
-
-            render json: @json.sort_by{|j| j[:messageData]}, except: [:created_at, :updated_at]
-    end
-  
-
-
 
   private
 
+  def jsonall()
+    @aux = []
+    @events.each do |event|
+      @participants = event.participants
+      if @participants != []
+        @participants.each do |participant|
+          @aux.push({
+            "participant": [
+              {
+                "id": participant.id,
+                "username": participant.user.username,
+                "registrationDate": participant.registrationDate
+              }
+            ],
+            "endDate": event.endDate,
+            "city": event.city,
+            "street": event.street,
+            "description": event.description,
+            "id": event.id,
+            "neighborhood": event.neighborhood,
+            "eventType": {
+              "name": event.eventType.name,
+              "id": event.eventType.id
+            },
+            "title": event.title,
+            "user": {
+              "birthdate": event.owner.birthdate,
+              "sex": event.owner.sex,
+              "id": event.owner.id,
+              "email": event.owner.email,
+              "username": event.owner.username
+            },
+            "startDate": event.startDate,
+            "referencePoint": event.referencePoint,
+            "status": event.status
+          })
+        end
+      else
+        @aux.push({
+          "participant": [
+          ],
+          "endDate": event.endDate,
+          "city": event.city,
+          "street": event.street,
+          "description": event.description,
+          "id": event.id,
+          "neighborhood": event.neighborhood,
+          "eventType": {
+            "name": event.eventType.name,
+            "id": event.eventType.id
+          },
+          "title": event.title,
+          "user": {
+            "birthdate": event.owner.birthdate,
+            "sex": event.owner.sex,
+            "id": event.owner.id,
+            "email": event.owner.email,
+            "username": event.owner.username
+          },
+          "startDate": event.startDate,
+          "referencePoint": event.referencePoint,
+          "status": event.status
+        })
+    end
+  end
+            return @aux
+  end
+
+  def jsonid()
+    @aux = []
+      @participants = @event.participants
+      if @participants != []
+        @participants.each do |participant|
+          @aux.push({
+            "participant": [
+              {
+                "id": participant.id,
+                "username": participant.user.username,
+                "registrationDate": participant.registrationDate
+              }
+            ],
+            "endDate": @event.endDate,
+            "city": @event.city,
+            "street": @event.street,
+            "description": @event.description,
+            "id": @event.id,
+            "neighborhood": @event.neighborhood,
+            "eventType": {
+              "name": @event.eventType.name,
+              "id": @event.eventType.id
+            },
+            "title": @event.title,
+            "user": {
+              "birthdate": @event.owner.birthdate,
+              "sex": @event.owner.sex,
+              "id": @event.owner.id,
+              "email": @event.owner.email,
+              "username": @event.owner.username
+            },
+            "startDate": @event.startDate,
+            "referencePoint": @event.referencePoint,
+            "status": @event.status
+          })
+        end
+      else
+        @aux.push({
+          "participant": [
+          ],
+          "endDate": @event.endDate,
+          "city": @event.city,
+          "street": @event.street,
+          "description": @event.description,
+          "id": @event.id,
+          "neighborhood": @event.neighborhood,
+          "eventType": {
+            "name": @event.eventType.name,
+            "id": @event.eventType.id
+          },
+          "title": @event.title,
+          "user": {
+            "birthdate": @event.owner.birthdate,
+            "sex": @event.owner.sex,
+            "id": @event.owner.id,
+            "email": @event.owner.email,
+            "username": @event.owner.username
+          },
+          "startDate": @event.startDate,
+          "referencePoint": @event.referencePoint,
+          "status": @event.status
+        })
+      end
+
+    
+            return @aux
+  end
+
+
     # Use callbacks to share common setup or constraints between actions.
     def set_event
-      if event = Event.find(params[:id])
-        @event = { participant: event.users, 
-                    endDate: event.endDate, 
-                    city: event.city,
-                    street: event.street,
-                    description: event.description,
-                    id: event.id,
-                    neighborhood: event.neighborhood,
-                    eventType: event.eventType,
-                    title: event.title,
-                    user: event.owner,
-                    startDate: event.startDate,
-                    referencePoint: event.referencePoint,
-                    status: event.status
-                    }
+      if @event = Event.find(params[:id])
       else
         render json: @event.errors, status: :bad_request
       end

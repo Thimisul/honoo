@@ -27,10 +27,6 @@ gem 'rack-reducer', require: 'rack/reducer'
 gem 'rack-cors'
 # Gerar Token
 gem 'jwt'
-# simple_command
-gem 'simple_command'
-# bcrypt
-gem 'bcrypt', '~> 3.1.7'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
